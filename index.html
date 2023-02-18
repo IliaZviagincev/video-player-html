@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+    
     <div class="player">
       <video class="videoplayer" src="video/1.mp4"></video>
 
@@ -24,30 +25,38 @@
           alt="кнопка пауза"
         />
         <p class="timestamp"></p>
+        
         <div class="volume_bar">
           <img
-            class="hidden volume-off volume-button"
-            src="img/volume_off.svg"
-            width="20"
-            alt=""
+          class="hidden volume-off volume-button"
+          src="img/volume_off.svg"
+          width="20"
+          alt=""
           />
           <img
-            class="volume-quiet volume-button"
-            src="img/volume_quiet.svg"
-            width="20"
-            alt=""
+          class="volume-quiet volume-button"
+          src="img/volume_quiet.svg"
+          width="20"
+          alt=""
           />
           <img
-            class="hidden volume-loud volume-button"
-            src="img/volume_loud.svg"
-            width="20"
-            alt=""
+          class="hidden volume-loud volume-button"
+          src="img/volume_loud.svg"
+          width="20"
+          alt=""
           />
           <input class="volume" type="range" value="25" />
+          <select class="speedRate" name="speed" id="spd">
+            <option value="2">2x</option>
+            <option value="1.5">1.5x</option>
+            <option selected="select" value="1">1x</option>
+            <option value="0.5">-1.5x</option>
+            <option value="0.1">-2x</option>
+          </select>
         </div>
       </div>
     </div>
-
+    
     <script>
       const playElm = document.querySelector(".playBtn");
       const pauseElm = document.querySelector(".pauseBtn");
@@ -60,6 +69,7 @@
       const volumePicLoud = document.querySelector(".volume-loud");
       const volumeBtnPic = document.querySelectorAll(".volume-button");
       const timestamp = document.querySelector(".timestamp");
+      const speedRate = document.querySelector('.speedRate')
 
       window.addEventListener("load", function (e) {
         let soundVolUser = 0;
@@ -167,6 +177,9 @@
           }
         })
       );
+      speedRate.addEventListener('change', function (e) {
+        playerElm.playbackRate =  speedRate.value;
+      });
     </script>
   </body>
 </html>

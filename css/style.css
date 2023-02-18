@@ -33,4 +33,11 @@
 }
 .volume {
   width: 70px;
+
+}
+.volume_bar {
+
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
 }
