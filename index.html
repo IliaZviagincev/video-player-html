@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="player">
+      <video class="videoplayer" src="video/1.mp4"></video>
+
+      <div class="control">
+        <div class="video">
+          <div class="time"></div>
+        </div>
+      </div>
+      <div class="control ctrlButtons">
+        <img class="playBtn buttons" src="img/play.svg" alt="кнопка плей" />
+        <img
+          class="pauseBtn buttons hidden"
+          src="img/pause.svg"
+          alt="кнопка пауза"
+        />
+        <p class="timestamp"></p>
+        <div class="volume_bar">
+          <img
+            class="hidden volume-off volume-button"
+            src="img/volume_off.svg"
+            width="20"
+            alt=""
+          />
+          <img
+            class="volume-quiet volume-button"
+            src="img/volume_quiet.svg"
+            width="20"
+            alt=""
+          />
+          <img
+            class="hidden volume-loud volume-button"
+            src="img/volume_loud.svg"
+            width="20"
+            alt=""
+          />
+          <input class="volume" type="range" value="25" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const playElm = document.querySelector(".playBtn");
+      const pauseElm = document.querySelector(".pauseBtn");
+      const playerElm = document.querySelector(".videoplayer");
+      const timeElm = document.querySelector(".time");
+      const videoTrack = document.querySelector(".video");
+      const volumeElm = document.querySelector(".volume");
+      const volumePicOff = document.querySelector(".volume-off");
+      const volumePicQuiet = document.querySelector(".volume-quiet");
+      const volumePicLoud = document.querySelector(".volume-loud");
+      const volumeBtnPic = document.querySelectorAll(".volume-button");
+      const timestamp = document.querySelector(".timestamp");
+
+      window.addEventListener("load", function (e) {
+        let soundVolUser = 0;
+        timestamp.textContent = `${trimTime(
+          playerElm.currentTime
+        )} / ${trimTime(playerElm.duration)}`;
+      });
+
+      function trimTime(time) {
+        time = Math.floor(time);
+        var minutes = Math.floor(time / 60);
+        var seconds = Math.floor(time - minutes * 60);
+        var minutesVal = minutes;
+        var secondsVal = seconds;
+        if (minutes < 10) {
+          minutesVal = "0" + minutes;
+        }
+        if (seconds < 10) {
+          secondsVal = "0" + seconds;
+        }
+        return minutesVal + ":" + secondsVal;
+      }
+      function playFunc() {
+        playerElm.play();
+        playElm.classList.add("hidden");
+        pauseElm.classList.remove("hidden");
+        videoPlay = setInterval(function () {
+          playerElm.volume = volumeElm.value / 100;
+          let videoTime = Math.round(playerElm.currentTime);
+          let videoLength = Math.round(playerElm.duration);
+          timestamp.textContent = `${trimTime(videoTime)} / ${trimTime(
+            videoLength
+          )}`;
+          timeElm.style.width = (videoTime * 100) / videoLength + "%";
+        }, 10);
+      }
+
+      function pauseFunc() {
+        playerElm.pause();
+        pauseElm.classList.add("hidden");
+        playElm.classList.remove("hidden");
+        clearInterval(videoPlay);
+      }
+      function muteSound() {
+        playerElm.volume = 0;
+        volumeElm.value = 0;
+        volumePicQuiet.classList.add("hidden");
+        volumePicLoud.classList.add("hidden");
+        volumePicOff.classList.remove("hidden");
+      }
+      function userSound() {
+        if (volumeElm.value != 0) {
+          if (volumeElm.value < 50) {
+            volumePicLoud.classList.add("hidden");
+            volumePicOff.classList.add("hidden");
+            volumePicQuiet.classList.remove("hidden");
+          } else {
+            volumePicOff.classList.add("hidden");
+            volumePicQuiet.classList.add("hidden");
+            volumePicLoud.classList.remove("hidden");
+          }
+        } else {
+          volumePicQuiet.classList.add("hidden");
+          volumePicLoud.classList.add("hidden");
+          volumePicOff.classList.remove("hidden");
+        }
+      }
+      playElm.addEventListener("click", function (e) {
+        playFunc();
+      });
+      pauseElm.addEventListener("click", function (e) {
+        pauseFunc();
+      });
+      playerElm.addEventListener("click", function (e) {
+        if (!playElm.classList.contains("hidden")) {
+          playFunc();
+        } else {
+          pauseFunc();
+        }
+      });
+      videoTrack.addEventListener("click", function (e) {
+        let posX = e.clientX - 8;
+        let timePos = (posX * 100) / 640;
+        timeElm.style.width = timePos + "%";
+        playerElm.currentTime =
+          (timePos * Math.round(playerElm.duration)) / 100;
+        timestamp.textContent = `${trimTime(
+          playerElm.currentTime
+        )} / ${trimTime(playerElm.duration)}`;
+      });
+
+      volumeElm.addEventListener("click", function (e) {
+        playerElm.volume = volumeElm.value / 100;
+        userSound();
+      });
+      volumeBtnPic.forEach((element) =>
+        element.addEventListener("click", function (e) {
+          if (this.classList.contains("volume-off")) {
+            playerElm.volume = soundVolUser / 100;
+            volumeElm.value = soundVolUser;
+            userSound();
+          } else {
+            soundVolUser = volumeElm.value;
+            muteSound();
+          }
+        })
+      );
+    </script>
+  </body>
+</html>

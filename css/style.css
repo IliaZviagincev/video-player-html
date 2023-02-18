@@ -1,0 +1,36 @@
+.control {
+  width: 100%;
+  background-color: #449deb;
+}
+.ctrlButtons {
+  margin: 5px 0 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.buttons {
+  width: 35px;
+  margin: 5px 0px 5px 10px;
+}
+.video {
+  width: 100%;
+  height: 15px;
+  background-color: #b6b6b6;
+}
+
+.time {
+  height: 15px;
+  width: 0%;
+  background-color: #49df35;
+}
+.player {
+  width: 640px;
+
+  
+}
+.hidden {
+  display: none;
+}
+.volume {
+  width: 70px;
+}
